@@ -1,141 +1,234 @@
-/*
-class Ship {
-    constructor(hull, firePower, accuracy){
-    this.hull = hull;
-    this.firePower = firePower;
-    this.accuracy = accuracy;
-    }
-    attack(enemy){
-        if (Math.random() < this.accuracy){
-            enemy.hull -= this.firePower;
-        }
-    }
-}
-const USSAssembly = new Ship(5, 5, .7);
-const aliens = [];
-const generateAlienShips = (num) =>{
-    for (let i = 0; i < num; i++) {
-        let hull = Math.floor(Math.random() * 4 + 3);
-        let firePower = Math.floor(Math.random() * 3 + 2);
-        let accuracy = (Math.floor(Math.random() * 3 + 6)/10);
-        const alienShip = new Ship(hull, firePower, accuracy);
-        aliens.push(alienShip);
-    }
-}
-generateAlienShips(10);
+const cards =
+[
+   {
+     name: "Bulbasaur",
+     damage: 60
+   }, {
+     name: "Caterpie",
+     damage: 40
+   }, {
+     name: "Charmander",
+     damage: 60
+   }, {
+     name: "Clefairy",
+     damage: 50
+   }, {
+     name: "Jigglypuff",
+     damage: 60
+   }, {
+     name: "Mankey",
+     damage: 30
+   }, {
+     name: "Meowth",
+     damage: 60
+   }, {
+     name: "Nidoran - female",
+     damage: 60
+   }, {
+     name: "Nidoran - male",
+     damage: 50
+   }, {
+     name: "Oddish",
+     damage: 40
+   }, {
+     name: "Pidgey",
+     damage: 50
+   }, {
+     name: "Pikachu",
+     damage: 50
+   }, {
+     name: "Poliwag",
+     damage: 50
+   }, {
+     name: "Psyduck",
+     damage: 60
+   }, {
+     name: "Rattata",
+     damage: 30
+   }, {
+     name: "Squirtle",
+     damage: 60
+   }, {
+     name: "Vulpix",
+     damage: 50
+   }, {
+     name: "Weedle", 
+     damage: 40
+   }
+];
 
-// let choice = Window.prompt("retreat? answer y/n");
+let eggBert = {
+   name: 'Eggbert',
+   cardsDealt: [],
+   cardsPlayed: 0,
+   roundsWon: 0,
+   
+};
 
-const randRBG = () => {
-    return (Math.floor(Math.random() * 256));
+let computer = {
+  name: 'Computer',
+  cardsDealt: [],
+  carsPlayed: 0,
+  roundsWon: 0,
 };
 
 
-function battle (fighter1, fighter2) {
-    while(fighter1.hull > 0 && fighter2.hull > 0){
-        let round = 1;
+//Fisher-Yates shuffle
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
 
-        fighter1.attack(fighter2);
-        
-        
-        //$('body').html('<h1>enemy hull is:' + fighter2.hull + '</h1>');
-        console.log(`enemy hull is: ${fighter2.hull}`);
-        
+  while (0 !== currentIndex) {
 
-        if(fighter2.hull > 0){
-            fighter2.attack(fighter1); 
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
 
-    
-        } 
-        
-        if (fighter1.hull < 0){
-            //$('body').html('<h1>HA HA, YOU DIED</h1').css('color', `rgb(${randRBG()}, ${randRBG()}, ${randRBG()})`).fadeIn(500).fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500);
-            console.log('Haha, you died');
-            return;
-        }
-    
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+}
+
+let cardsShuffled = [];
+
+$("#start").click(function() {
+  cardsShuffled = shuffle(cards);
+  $("#game-on").append("Cards Dealt");
+  $("#start").hide();
   
 
-      
-        //$('body').html('<h1>Your hull is: ' + fighter1.hull +'</h1');
-        console.log(`Your hull is: ${fighter1.hull}`);
-
-        console.log(`round ${round} end`);  
-        round ++; 
-     
-    }
-
-
-    
-    //$('h1').html('<h1>ENEMY KILLED-USS Assembly Wins!</h1').css('color', `rgb(${randRBG()}, ${randRBG()}, ${randRBG()})`).fadeIn(500).fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500);
-    console.log(`ENEMY KILLED`);
-    console.log('');
+      const divideCards = () => {
+        eggBert.cardsDealt = cardsShuffled.slice(0, 9);
+        computer.cardsDealt = cardsShuffled.slice(9, 18);
+        console.log(eggBert.cardsDealt);
+        console.log(computer.cardsDealt);
+      }
+      divideCards();
+});
 
 
-
-}
-for (let i = 0; i < aliens.length; i++) {
-    battle(USSAssembly, aliens[i]);
-    // if (choice === 'y'){
-    //     return;
-    // }
-}
-*/
-class Ship {
-    constructor(hull, firePower, accuracy){
-    this.hull = hull;
-    this.firePower = firePower;
-    this.accuracy = accuracy;
-    }
-    attack(enemy){
-        if (Math.random() < this.accuracy){
-            enemy.hull -= this.firePower;
-        }
-    }
-}
-const USSAssembly = new Ship(20, 5, .7);
-const aliens = [];
-const generateAlienShips = (num) =>{
-    for (let i = 0; i < num; i++) {
-        let hull = Math.floor(Math.random() * 4 + 3);
-        let firePower = Math.floor(Math.random() * 3 + 2);
-        let accuracy = (Math.floor(Math.random() * 3 + 6)/10);
-        const alienShip = new Ship(hull, firePower, accuracy);
-        aliens.push(alienShip);
-    }
-}
-generateAlienShips(10);
-
-const randRBG = () => {
-    return (Math.floor(Math.random() * 256));
+const battle1 = () => {
+  let eggBertScore = 0;
+  let computerScore = 0;
+  for(let i = 0; i < 3; i++) {
+    if(eggBert.cardsDealt[i].damage > computer.cardsDealt[i].damage) {
+      eggBertScore ++;
+    } else if (
+      computer.cardsDealt[i].damage > eggBert.cardsDealt[i].damage) {
+      computerScore ++;
+    } 
+  }
+  if(eggBertScore > computerScore) {
+    eggBert.roundsWon ++;
+    $('#round1-won').append('Eggbert won round 1');
+    $('#eggBert-roundsWon').text(eggBert.roundsWon);
+    window.setTimeout(function() {
+      $('#round1-won').remove('');
+    },3000)
+  } else if
+  (computerScore > eggBertScore) {
+    computer.roundsWon ++;
+    $('#round1-won').append('Computer won round 1');
+    $('#computer-roundsWon').text(computer.roundsWon);
+    window.setTimeout(function() {
+      $('#round1-won').remove('');
+    },3000)
+  } else {
+    $('#round1-won').append('Round is a tie');
+    window.setTimeout(function() {
+      $('#round1-won').remove('');
+    },3000)
+  }
 };
 
-// let choice = Window.prompt("retreat? answer y/n");
+const battle2 = () => {
+  let eggBertScore = 0;
+  let computerScore = 0;
+  for(let i = 3; i < 6; i++) {
+    if(eggBert.cardsDealt[i].damage > computer.cardsDealt[i].damage) {
+      eggBertScore ++;
+    } else if (
+      computer.cardsDealt[i].damage > eggBert.cardsDealt[i].damage) {
+      computerScore ++;
+    } 
+  }
+  if(eggBertScore > computerScore) {
+    eggBert.roundsWon ++;
+    $('#round2-won').append('Eggbert won round 2');
+    $('#eggBert-roundsWon').text(eggBert.roundsWon);
+    window.setTimeout(function() {
+      $('#round2-won').remove('');
+    },3000)
+  } else if
+  (computerScore > eggBertScore) {
+    computer.roundsWon ++;
+    $('#round2-won').append('Computer won round 2');
+    $('#computer-roundsWon').text(computer.roundsWon);
+    window.setTimeout(function() {
+      $('#round2-won').remove('');
+    },3000)
+  } else {
+    $('#round2-won').append('Round is a tie');
+    window.setTimeout(function() {
+      $('#round2-won').remove('');
+    },3000)
+  }
+};
 
+const battle3 = () => {
+  let eggBertScore = 0;
+  let computerScore = 0;
+  for(let i = 3; i < 6; i++) {
+    if(eggBert.cardsDealt[i].damage > computer.cardsDealt[i].damage) {
+      eggBertScore ++;
+    } else if (
+      computer.cardsDealt[i].damage > eggBert.cardsDealt[i].damage) {
+      computerScore ++;
+    } 
+  }
+  if(eggBertScore > computerScore) {
+    eggBert.roundsWon ++;
+    $('#round3-won').append('Eggbert won round 2');
+    $('#eggBert-roundsWon').text(eggBert.roundsWon);
+    window.setTimeout(function() {
+      $('#round3-won').remove('');
+    },3000)
+  } else if
+  (computerScore > eggBertScore) {
+    computer.roundsWon ++;
+    $('#round3-won').append('Computer won round 2');
+    $('#computer-roundsWon').text(computer.roundsWon);
+    window.setTimeout(function() {
+      $('#round3-won').remove('');
+    },3000)
+  } else {
+    $('#round3-won').append('Round is a tie');
+    window.setTimeout(function() {
+      $('#round3-won').remove('');
+    },3000)
+  }
+};
 
-const battle = (fighter1, fighter2) => {
-    while(fighter1.hull > 0 && fighter2.hull > 0){
-        let round = 1;
-        fighter1.attack(fighter2);
-        console.log(`enemy hull is: ${fighter2.hull}`);
-        if(fighter2.hull > 0){
-            fighter2.attack(fighter1); 
-        } if (fighter1.hull < 0){
-            console.log('Haha, you died');
-            return;
-        }
-        
-        console.log(`Your hull is: ${fighter1.hull}`);
-        console.log(`round ${round} end`);  
-        round ++; 
-    }
-    $('h1').html('<h1>ENEMY KILLED-USS Assembly Wins!</h1').css('color', `rgb(${randRBG()}, ${randRBG()}, ${randRBG()})`).fadeIn(500).fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500);
-    console.log(`ENEMY KILLED`);
-    console.log('');
-}
-for (let i = 0; i < aliens.length; i++) {
-    battle(USSAssembly, aliens[i]);
-    // if (choice === 'y'){
-    //     return;
-    // }
-}
+$(".rnd1").click(function() {
+  $( ".rnd1" ).remove();
+  battle1();
+  for(let i = 0; i < 3; i++) {
+    $("#battle").append(`<li>${eggBert.cardsDealt[i].name}-${eggBert.cardsDealt[i].damage} vs ${computer.cardsDealt[i].name} ${computer.cardsDealt[i].damage}</li>`);
+  }
+});
+
+$(".rnd2").click(function() {
+  $( ".rnd2" ).remove();
+  battle2();
+  for(let i = 3; i < 6; i++) {
+    $("#battle").append(`<li>${eggBert.cardsDealt[i].name}-${eggBert.cardsDealt[i].damage} vs ${computer.cardsDealt[i].name} ${computer.cardsDealt[i].damage}</li>`);
+  }
+}); 
+
+$(".rnd3").click(function() {
+  $( ".rnd3" ).remove();
+  battle3();
+  for(let i = 6; i < 9; i++) {
+    $("#battle").append(`<li>${eggBert.cardsDealt[i].name}-${eggBert.cardsDealt[i].damage} vs ${computer.cardsDealt[i].name} ${computer.cardsDealt[i].damage}</li>`);
+  }
+});
